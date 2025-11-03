@@ -1,0 +1,5 @@
+name: gym_retro
+dependencies:
+  - python==3.10.14
+  - pip==24.2
+  - numpy==1.26.4

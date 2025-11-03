@@ -1,0 +1,10 @@
+dependencies:
+  - pip
+  - pip:
+      - ultralytics==8.2.103
+      - pycocotools==2.0.7
+      - onnx==1.16.0
+      - opencv-python==4.9.0.80
+      - PyQtChart==5.15.6
+      # (옵션) ONNX Runtime GPU까지 원하면 아래를 별도 레이어로 빼는 걸 권장
+      # - onnxruntime-gpu==1.16.0

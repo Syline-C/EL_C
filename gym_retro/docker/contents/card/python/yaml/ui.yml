@@ -1,0 +1,7 @@
+dependencies:
+  - pyqt=5.15.9
+  - pyqtwebengine=5.15.0   
+  - pip
+  - pip:
+      - PyQtChart==5.15.6 
+

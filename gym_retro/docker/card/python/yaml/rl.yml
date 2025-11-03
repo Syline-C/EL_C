@@ -1,0 +1,6 @@
+dependencies:
+  - gymnasium=0.29.1
+  - pip
+  - pip:
+    - gym-retro==0.9.0
+    - pygame==2.5.2
