@@ -1,3 +1,6 @@
 notebooks/data
 notebooks/cifar_net.pth
 .ipynb_checkpoints/
+
+# ignore Mario logs
+gym_retro/docker/contents/AI/superMario/LOG/
