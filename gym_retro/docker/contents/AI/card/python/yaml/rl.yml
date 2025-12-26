@@ -2,5 +2,9 @@ dependencies:
   - gymnasium=0.29.1
   - pip
   - pip:
-    - gym-retro==0.9.0
+    - gym==0.26.2
+    - gym_super_mario_bros==7.4.0
+    - gym_notices==0.1.0
+    - nes-py==8.2.1
+    - pyglet==1.5.21
     - pygame==2.5.2

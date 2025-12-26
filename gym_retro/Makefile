@@ -1,8 +1,10 @@
 
+default: run
+
 .PHONY: help
 help:
 	@echo "Targets:"
-	@echo "  make start         # conda env 생성(레이어 순차 적용)"
+	@echo "  make               # conda env 생성(레이어 순차 적용)"
 	@echo "  make stop          # + GPU 레이어(Pytorch or TF 중 택1) 적용"
 	@echo "  make remove        # 환경 export (environment.lock.yml)"
 	@echo "  make build         # Docker 이미지 빌드(호스트 TZ 반영)"
@@ -15,14 +17,14 @@ help:
 
 
 
-.PHONY:start
-start:
+.PHONY:run
+run:
 	./docker/00_startDocker.sh
 
 .PHONY:stop
 stop:
 	./docker/01_stopDocker.sh
 
-.PHONY:remove
-remove:
+.PHONY:clean
+clean:
 	./docker/02_removeDockerEnv.sh
