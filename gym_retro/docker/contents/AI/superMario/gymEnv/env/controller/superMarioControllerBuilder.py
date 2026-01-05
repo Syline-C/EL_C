@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 import gymnasium as gym
 
 from config.define import DEFINE
-from logger.logger import logger
+#from logger.logger import logger
 
 from .IsuperMarioController import IsuperMarioController
 from .superMarioViewController import superMarioViewController
@@ -44,8 +44,8 @@ class superMarioControllerBuilder(IsuperMarioController):
         """
         marioViewController   = superMarioViewController(self.gymMario, self.title, self.mode)
         
-        if marioViewController is DEFINE._DEFINE_NULL:
-            logger.instanceEmptyAssertLog('viewController')
+#        if marioViewController is DEFINE._DEFINE_NULL:
+#            logger.instanceEmptyAssertLog('viewController')
 
         return marioViewController
 
@@ -56,8 +56,8 @@ class superMarioControllerBuilder(IsuperMarioController):
         """
         marioModelController   = superMarioModelController(self.gymMario)
 
-        if marioModelController is DEFINE._DEFINE_NULL:
-            logger.instanceEmptyAssertLog('modelController')
+#        if marioModelController is DEFINE._DEFINE_NULL:
+#            logger.instanceEmptyAssertLog('modelController')
 
         return marioModelController
         

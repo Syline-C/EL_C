@@ -8,7 +8,7 @@
 from config.define import DEFINE
 from config.memoryMap import memoryMap
 
-from logger.logger import logger
+#from logger.logger import logger
 
 class superMarioDataAccessor:
 
@@ -75,8 +75,8 @@ class superMarioDataAccessor:
         """
         score = self.map['score']
 
-        if score is not DEFINE._DEFINE_NULL :
-            logger.variableNoneAssertLog('score')
+#        if score is not DEFINE._DEFINE_NULL :
+#            logger.variableNoneAssertLog('score')
 
         return score
 
@@ -87,8 +87,8 @@ class superMarioDataAccessor:
         """
         time = self.map['time']
 
-        if time is not DEFINE._DEFINE_NULL :
-            logger.variableNoneAssertLog('time')
+#        if time is not DEFINE._DEFINE_NULL :
+#            logger.variableNoneAssertLog('time')
 
         return time
 
@@ -100,8 +100,8 @@ class superMarioDataAccessor:
         """
         state = self.map['player_state']
 
-        if state is DEFINE._DEFINE_NULL :
-            logger.variableNoneAssertLog('player_state')
+#        if state is DEFINE._DEFINE_NULL :
+#            logger.variableNoneAssertLog('player_state')
 
         return (state == DEFINE._DEFINE_PLAYER_DEAD)
         
@@ -112,8 +112,8 @@ class superMarioDataAccessor:
         """
         world_state   =   self.map['world_state']
 
-        if world_state is DEFINE._DEFINE_NULL:
-            logger.variableNoneAssertLog('world_state')
+#        if world_state is DEFINE._DEFINE_NULL:
+#            logger.variableNoneAssertLog('world_state')
 
         return (world_state == DEFINE._DEFINE_WORLD_STATE_END)
 

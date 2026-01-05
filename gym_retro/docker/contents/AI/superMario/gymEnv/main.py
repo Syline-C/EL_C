@@ -7,7 +7,11 @@
 """
 import pyglet
 import os
+import inspect
+
 from env.envFactory import envFactory
+from env.builder.marioBuilder import superMario 
+from env.observer.gridRenderCallBack import gridRenderCallBack
 
 import time
 
@@ -21,19 +25,24 @@ def init_env(mode='interactive'):
 
     makeLogDir()
 
-    #builder         = marioBuilder('Supermario','SuperMarioBros-v0')
-    builder         = envFactory("mario", "1", 0).build()
-    builder.set_mode(mode)
-    env = builder.build()
+    #model, env = envFactory("mario", "1", 0, mode).build("PPO")
+    #model, env = envFactory("mario", "1", 0, mode).gridBuild(2, "PPO")
+    factory = envFactory("mario", "1", 0, mode)
+    model, env = factory.gridBuild(9, "PPO")
+
+    callBack = gridRenderCallBack(facade=factory.facade)
+    model.learn(total_timesteps=100, callback=callBack)
+
+
+    #builder = envFactory("mario", "1", 0, mode).build("PPO")
+    #builder.set_mode(mode)
+    #model, env = builder.build("mario")
 
 def update(dt):
     global state, done, reward
     if done:
         state = env.reset()
-    state, reward, done = env.step()
-    print(state)
-    print(reward)
-    print(done)
+    state, reward, done, val = env.step()
     env.render(reward)
     
 def set_action_and_step(action):
@@ -64,7 +73,8 @@ def makeLogDir():
 
 if __name__ == "__main__":
 
-    init_env('command')
+    #init_env('command')
+    init_env('rgb_array')
     pyglet.clock.schedule_interval(update, 1/60)
     pyglet.app.run()
 

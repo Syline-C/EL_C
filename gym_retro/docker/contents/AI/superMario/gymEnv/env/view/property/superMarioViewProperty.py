@@ -15,7 +15,7 @@ class superMarioViewProperty:
         """
         self.SCREEN_HEIGHT   =   1000
         self.SCREEN_WIDTH    =   1000
-        self.TITLE           =   "ENJOY_MATH_SUPERMARIO"   
+        self.TITLE           =   "SuperMarioBros"   
 
     def get_screen_height(self):
         """ 

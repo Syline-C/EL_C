@@ -7,7 +7,7 @@
 """
 from abc import ABC, abstractmethod
 from config.define import DEFINE
-from logger.logger import logger
+#from logger.logger import logger
 
 from ..view.superMarioView import superMarioView
 from ..model.superMario.superMarioModel import IsuperMarioModel
@@ -125,8 +125,8 @@ class superMarioModelController(IsuperMarioModel):
         """
         marioModel = superMarioModel(self.gym)
 
-        if marioModel is DEFINE._DEFINE_NULL:
-           logger.instanceEmptyAssertLog('model') 
+#        if marioModel is DEFINE._DEFINE_NULL:
+#           logger.instanceEmptyAssertLog('model') 
 
         return marioModel
 

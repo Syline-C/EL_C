@@ -6,9 +6,10 @@
 @date       2024.05.06
 """
 import pyglet
+import math
 
 from config.define import DEFINE
-from logger.logger import logger
+#from logger.logger import logger
 
 from nes_py._image_viewer import ImageViewer 
 from .IsuperMarioView import IsuperMarioView
@@ -47,13 +48,20 @@ class superMarioView(IsuperMarioView):
                 self.viewer = self.set_image_viewer()
 
                 self.viewer.open()
-                self.get_img_data(self.screen)
-            self.show(self.screen)
+                self.window = self.viewer._window
+
+            if len(self.screen.shape) == 4:
+                self.showGrid(self.screen)
+
+            else:
+                self.show(self.screen)
             
             if self.mode == 'interactive':
                 return self.window
 
         elif mode == 'rgb_array':
+            print("mode:rgb")
+            #self.showGrid(self.screen)
             return self.screen
         else:
             render_modes = [repr(x) for x in self.metadata['render.modes']]
@@ -69,14 +77,14 @@ class superMarioView(IsuperMarioView):
         width   =   self.viewProperty.get_screen_width()
         title   =   self.viewProperty.get_title()
 
-        viewer = ImageView*ggner(
+        viewer = ImageViewer(
                     caption=title,
                     height=height,
                     width=width,
                 )
 
-        if viewer is DEFINE._DEFINE_NULL:
-           logger.instanceEmptyAssertLog('gymMario View') 
+#        if viewer is DEFINE._DEFINE_NULL:
+#           logger.instanceEmptyAssertLog('gymMario View') 
         return viewer
 
     def step(self, action):
@@ -86,18 +94,30 @@ class superMarioView(IsuperMarioView):
         @param  action      :   Action selected from Mario's action list
         @return             :   None
         """
-        state, reward, done, val1, val2 =  self.gymMario.step(action)
+        #obs, reward, terminated, truncated, info  =  self.gymMario.step(action)
+        result  =  self.gymMario.step(action)
 
-        self.screen = state
-        self.done = done
-        return self.gymMario.step(action)
+        self.screen = result[0]
+        self.done = result[2]
 
-    def reset(self):
+        if len(result) == 4:
+            obs, reward, done, info = result
+            terminated = done
+            truncated = False
+        else :
+            obs, reward, terminated, truncated, info = result
+
+        return obs, reward, terminated, truncated, info
+
+    def reset(self, obs):
         """ 
         @brief              :   Function to initialize Mario's view
         @return             :   None
         """
-        return self.gymMario.reset()
+        self.screen = obs
+        #self.render(mode='human')
+        self.render(mode='rgb_array')
+        return obs
 
     def get_img_data(self, frame):
         """ 
@@ -132,15 +152,13 @@ class superMarioView(IsuperMarioView):
         height  =   self.viewProperty.get_screen_height()
         width   =   self.viewProperty.get_screen_width()
 
-
-        if len(frame.shape) != 3:
-            raise ValueError('frame should have shape with only 3 dimensions')
         if not self.is_open:
-            self.open()
+            self.viewer.open()
+            self.window = self.viewer._window
 
-        self.window.clear()
         self.window.switch_to()
         self.window.dispatch_events()
+        self.window.clear()
 
         image = pyglet.image.ImageData(
             frame.shape[1],
@@ -152,6 +170,46 @@ class superMarioView(IsuperMarioView):
         # send the image to the window
         self.image = image
         image.blit(0, 0, width=width, height=height)
+
+        self.window.flip()
+
+
+    def showGrid(self, frames):
+        #if self.window is None: return
+        if self.window is None: 
+            self.viewer = self.set_image_viewer()
+            self.viewer.open()
+            self.window = self.viewer._window
+
+        
+        self.window.switch_to()
+        self.window.dispatch_events()
+        self.window.clear()
+
+        num_envs = len(frames)
+        grid_size = math.ceil(num_envs**0.5) 
+
+        cell_w = self.viewProperty.get_screen_width() // grid_size
+        cell_h = self.viewProperty.get_screen_height() // grid_size
+
+        for i, frame in enumerate(frames):
+            row = i // grid_size
+            col = i % grid_size
+
+            image = pyglet.image.ImageData(
+                frame.shape[1], frame.shape[0], 'RGB',
+                frame.tobytes(), pitch=frame.shape[1] * -3
+            )
+
+            x_pos = col * cell_w
+            y_pos = (grid_size - 1 - row) * cell_h
+            image.blit(x_pos, y_pos, width=cell_w, height=cell_h)
+
+        print(f"Grid: {grid_size}, Cell: {cell_w}x{cell_h}")
+        print(f"Blit at: {x_pos}, {y_pos}")
+        print(f"Frame Sample: {frame[120, 128, :]}")
+        self.window.flip()
+        pyglet.clock.tick()
 
     @property
     def is_open(self):

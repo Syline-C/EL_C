@@ -8,7 +8,7 @@
 
 import gymnasium as gym 
 
-from logger.logger import logger
+#from logger.logger import logger
 from config.define import DEFINE
 
 #from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
@@ -20,9 +20,9 @@ from ..coordinator.superMarioDrawCoordinator import superMarioDrawCoordinator
 from ..observer.Iobserver import Iobserver
 from ..observer.observer import observer
 
-from logger.logger import logger
-from logger.actionDataLogger import actionDataLogger
-from logger.frameDataLogger import frameDataLogger
+#from logger.logger import logger
+#from logger.actionDataLogger import actionDataLogger
+#from logger.frameDataLogger import frameDataLogger
 
 class marioFacade(Iobserver):
 
@@ -49,14 +49,14 @@ class marioFacade(Iobserver):
 
         self.viewController     = self.controllerBuilder.get_marioViewController()
         self.modelController    = self.controllerBuilder.get_marioModelController()
-        self.actionLogger       = actionDataLogger()
-        self.frameLogger        = frameDataLogger() 
+#        self.actionLogger       = actionDataLogger()
+#        self.frameLogger        = frameDataLogger() 
         self.observer           = observer()
        
         self.set_observer()
-        self.makeLog()
+        #self.makeLog()
 
-    def step(self):
+    def step(self, action):
         """
         @brief              :   Function that returns data based on the results of Mario's decision.
         @return state       :   Game data based on Mario's decision-making results 
@@ -64,14 +64,8 @@ class marioFacade(Iobserver):
         @return done        :   Whether to reset the game according to the results of Mario's decision
         """
 
-        state, reward, done , val , val2= self.actionCoordinator.makeStep()
-        print("state %s done %s val %s val2 %s", state, reward, done, val, val2)
-        self.writeLog(state, reward)
-        
-        if reward == DEFINE._DEFINE_REWARD_MAX_MIN_VAL :
-           self.closeLogStream()
-
-        return (state, reward, done)
+        result  = self.actionCoordinator.setStep(action)
+        return result
 
     def interactiveStep(self, action):
         """
@@ -90,32 +84,50 @@ class marioFacade(Iobserver):
         return (state, reward, done)
 
 
-    def render(self, reward):
+    #def render(self, reward):
+    def render(self, mode='human', data=None):
         """
         @brief              :   Function that renders the screen on a window based on data
         @param   reward     :   Reward value according to Mario's decision
         @return             :   None
         """
-        if self.viewController is DEFINE._DEFINE_NULL:
-           logger.instanceEmptyAssertLog('viewController') 
+#        print("-----------")
+#        print(data)
+#        if self.viewController is DEFINE._DEFINE_NULL:
+#           logger.instanceEmptyAssertLog('viewController') 
+        #if data is not None and hasattr(data, 'shape') and len(data.shape) == 4:
+        if data is not None:
+            print('show')
+            self.viewController.getMarioView().showGrid(data)
+            return
 
-        window = self.viewController.render()
+        else:
+            pass
 
-        if self.viewController.get_marioView() is not DEFINE._DEFINE_NULL:
-            self.update('reward', reward)
+        if self.mode == 'rgb_array' or self.mode == 'command':
+            #print("Ohter show")
+            data =  self.viewController.render()
+            #print(data)
+            return data
 
-        if self.mode == 'interactive':    
-            return window
+        return None
+        #window = self.viewController.render()
 
-    def reset(self):
+#        if self.viewController.get_marioView() is not DEFINE._DEFINE_NULL:
+#            self.update('reward', reward)
+
+#        if self.mode == 'interactive':    
+#            return window
+
+    def reset(self, obs):
         """
         @brief              :   Function to reset the data of the game window and return it to its initial state
         @return             :   None
         """
-        if self.viewController is DEFINE._DEFINE_NULL:
-           logger.instanceEmptyAssertLog('viewController') 
+#        if self.viewController is DEFINE._DEFINE_NULL:
+#           logger.instanceEmptyAssertLog('viewController') 
 
-        self.viewController.reset()
+        self.viewController.reset( obs)
 
 
     def set_observer(self):
@@ -152,17 +164,21 @@ class marioFacade(Iobserver):
             self.frameLogger.setStepNum(stepNum)
             self.observer.frameLogNotify( value )
 
-    def writeLog(self, frame, reward):
-        self.update('actionlog', reward)
-        self.update('framelog', frame)
+    def gridCallBack(self):
+        marioView = self.viewController.getMarioView()
+        return self.viewController.gridCallBack()
 
-    def makeLog(self):
-        self.frameLogger.makeLogFile()
-        self.actionLogger.makeLogFile()
-
-    def closeLogStream(self):
-        self.frameLogger.closeStream()
-        self.actionLogger.closeStream()
+#    def writeLog(self, frame, reward):
+#        self.update('actionlog', reward)
+#        self.update('framelog', frame)
+#
+#    def makeLog(self):
+#        self.frameLogger.makeLogFile()
+#        self.actionLogger.makeLogFile()
+#
+#    def closeLogStream(self):
+#        self.frameLogger.closeStream()
+#        self.actionLogger.closeStream()
 
     def reviveScenarioPoint(self):
         #TODO get specific scenario state data from logfile and set that data at window

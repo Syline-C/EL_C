@@ -9,7 +9,7 @@ from abc import ABC, abstractmethod
 import gymnasium as gym
 
 from config.define import DEFINE
-from logger.logger import logger
+#from logger.logger import logger
 from ..view.IsuperMarioView import IsuperMarioView
 from ..view.superMarioView import superMarioView
 from ..view.property.superMarioViewProperty import superMarioViewProperty
@@ -40,33 +40,29 @@ class superMarioViewController(IsuperMarioView):
         @return reward      :   Reward Value based on Mario's decision-making results 
         @return done        :   Whether to reset the game according to the results of Mario's decision
         """
-        state, reward, done , val1, val2 =  self.marioView.step(action)
-
-#        state = result[0]
-#        reward = result[1]
-#        done    = result[2]
-#        val1    = result[3]
-#        val2    = result[4]
-        return state, reward, done, val1, val2
+        return  self.marioView.step(action)
 
     def render(self):
         """
         @brief              :   Function that renders the screen on a window based on data
         @return             :   None
         """
-
+        #print(self.mode)
         if self.mode == 'command':
-            self.marioView.render()
+            return self.marioView.render('rgb_array')
+        if self.mode == 'rgb_array':
+            #print("rgb")
+            return  self.marioView.render('rgb_array')
         if self.mode == 'interactive':
             window = self.marioView.render()
             return window
 
-    def reset(self):
+    def reset(self, obs):
         """
         @brief              :   Function to reset the data of the game window and return it to its initial state
         @return             :   None
         """
-        self.marioView.reset()
+        self.marioView.reset(obs)
 
 
     def set_superMarioView(self):
@@ -76,12 +72,12 @@ class superMarioViewController(IsuperMarioView):
         """
         marioView = superMarioView( self.gymEnv, self.mode)
 
-        if marioView is  DEFINE._DEFINE_NULL:
-            logger.instanceEmptyAssertLog("View")
+#        if marioView is  DEFINE._DEFINE_NULL:
+#            logger.instanceEmptyAssertLog("View")
 
         return marioView 
 
-    def get_marioView(self):
+    def getMarioView(self):
         """ 
         @brief              :   Function to get a Super Mario view class
         @return marioModel  :   mario view class instance

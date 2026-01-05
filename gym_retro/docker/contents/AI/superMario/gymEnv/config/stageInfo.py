@@ -16,7 +16,7 @@ class stageInfo:
     }
 
     MARIO_INFO = {
-            "1" :                       ['SuperMarioBros-1-1-v3', 
+            "1" :                       ['SuperMarioBros-1-1-v0', 
                                          'SuperMarioBros-1-2-v0', 
                                          'SuperMarioBros-1-3-v0', 
                                          'SuperMarioBros-1-4-v0', 
@@ -53,6 +53,5 @@ class stageInfo:
                                          'SuperMarioBros-4-7-v0', 
                                          'SuperMarioBros-4-8-v0',
                                          ],
-   
     }
    

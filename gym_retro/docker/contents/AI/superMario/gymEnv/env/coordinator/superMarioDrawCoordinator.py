@@ -21,7 +21,7 @@ class superMarioDrawCoordinator(Iobserver):
         self.modelController    =   controllerBuilder.get_marioModelController()
         self.viewController     =   controllerBuilder.get_marioViewController()
 
-        self.viewer             =   self.viewController.get_marioView().viewer
+        self.viewer             =   self.viewController.getMarioView().viewer
 
         self.window             =   None
         self.drawer             =   None

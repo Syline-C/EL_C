@@ -9,7 +9,7 @@ import pyglet
 from queue import Queue
 
 from config.define import DEFINE
-from logger.logger import logger
+#from logger.logger import logger
 from ..property.figureProperty import figureProperty
 from ..property.textProperty import textProperty
 
@@ -46,8 +46,8 @@ class draw:
 
         step_node = (circle, text) 
 
-        if step_circle is DEFINE._DEFINE_NULL:
-           logger.instanceEmptyAssertLog('step circle') 
+#        if step_circle is DEFINE._DEFINE_NULL:
+#           logger.instanceEmptyAssertLog('step circle') 
 
         return step_node
 
@@ -82,8 +82,8 @@ class draw:
                           font_size= fontsize,
                           x=x_coordinate, y=y_coordinate)
 
-        if reward_label is DEFINE._DEFINE_NULL:
-           logger.instanceEmptyAssertLog('reward label')
+#        if reward_label is DEFINE._DEFINE_NULL:
+#           logger.instanceEmptyAssertLog('reward label')
 
         return reward_label
 
